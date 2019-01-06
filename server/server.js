@@ -14,24 +14,14 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-//   socket.emit('newEmail', {
-//       from: 'andrew@example.com',
-//       text: "Hey. What is going on",
-//       createAt: 123
-//   });
-
-  socket.emit('newMessage', {
-    from: 'andrew',
-    text: 'Meet me at 6',
-    createAt: 123
-  });
-
-//   socket.on('createEmail', (newEmail) => {
-//     console.log("createEmail", newEmail);
-//   });
-
   socket.on('createMessage', (message) => {
-    console.log("Message", message);
+    console.log("createMessage", message);
+
+    io.emit('newMessage', {
+        from: message.from,
+        text: message.text,
+        createAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
@@ -64,5 +54,8 @@ server.listen(port, () => {
 
 console.log(__dirname + '../public');
 console.log(publicPath);
+
+socket.emit => emit msg to single user
+io.emit => emit msg to all users
 
 */
